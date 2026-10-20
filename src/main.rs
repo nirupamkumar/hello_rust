@@ -1,5 +1,31 @@
 use std::io;
 use colored::*;
+use serde::Deserialize;
+
+#[derive(Deserialize, Debug)]
+struct WeatherResponse {
+    weather : Vec<Weather>,
+    main: Main,
+    wind: Wind,
+    name: String,
+}
+
+#[derive(Deserialize, Debug)]
+struct Weather {
+    description : String,
+}
+
+#[derive(Deserialize, Debug)]
+struct Main {
+    temp: f64,
+    humidity: f64,
+    pressure: f64,
+}
+
+#[derive(Deserialize, Debug)]
+struct Wind {
+    speed: f64,
+}
 
 fn main() {
     println!("{}", "Welcome to Weather Station".bright_yellow());
