@@ -1,4 +1,3 @@
-use core::error;
 use std::io;
 use colored::*;
 use serde::Deserialize;
@@ -87,6 +86,10 @@ fn display_weather_info(response: &WeatherResponse) {
 fn main() {
     println!("{}", "Welcome to Weather Station".bright_yellow());
 
+    dotenvy::dotenv().ok();
+
+    let api_key = std::env::var("OPENWEATHER_API_KEY").expect("OPENWEATHER_API_KEY must be set in your .env file");
+
     loop {
         println!("{}", "Please enter the name of the city:".bright_green());
         let mut city = String::new();
@@ -98,9 +101,7 @@ fn main() {
         io::stdin().read_line(&mut country_code).expect("Failed to read input");
         let country_code = country_code.trim();
 
-        let api_key = "52856cd34fb8cb387cee933c66e44dc1";
-
-        match get_weather_info(city, country_code, api_key) {
+        match get_weather_info(city, country_code, &api_key) {
             Ok(response) => { display_weather_info(&response); }
             Err(error) => { println!("Error fetching weather data: {}", error); }
         }
@@ -111,8 +112,6 @@ fn main() {
         let mut input = String::new();
         io::stdin().read_line(&mut input).expect("Failed to read input");
         let input = input.trim().to_lowercase();
-
-
 
         if input != "yes" {
             println!("Thank you for using our software!");
