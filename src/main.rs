@@ -1,3 +1,4 @@
+use core::error;
 use std::io;
 use colored::*;
 use serde::Deserialize;
@@ -36,6 +37,53 @@ fn get_weather_info(city: &str, country_code: &str, api_key: &str,) -> Result<We
     Ok(response_json)
 }
 
+fn get_temperature_emoji(temp: f64) -> &'static str {
+    if temp < 0.0 {
+        "🥶"   
+    }
+    else if temp < 10.0 {
+        "❄️"
+    }
+    else if temp < 20.0 {
+        "🌤️"
+    }
+    else if temp < 30.0 {
+        "☀️"
+    }
+    else {
+        "🔥"
+    }
+}
+
+fn display_weather_info(response: &WeatherResponse) {
+    let description = &response.weather[0].description;
+
+    let colored_description = match description.as_str() {
+        "clear sky" => description.bright_yellow(),
+        "few clouds" | "scattered clouds" | "broken clouds" => {description.bright_cyan()}
+        "shower rain" | "rain" | "light rain" => description.bright_blue(),
+        "thunderstrom" => description.bright_magenta(),
+        "snow" => description.white(),
+        "mist" | "fog" | "haze" => description.bright_black(),
+        _ => description.normal(),
+        
+    };
+
+    println!("Weather: {}", colored_description);
+
+    let temp = response.main.temp;
+    let humidity = response.main.humidity;
+    let pressure = response.main.pressure;
+    let wind_speed = response.wind.speed;
+
+    println!("Temperature: {}°C {}", temp, get_temperature_emoji(temp));
+    println!("Humidity: {}%", humidity);
+    println!("Pressure: {} hPa", pressure);
+    println!("Wind Speed: {} m/s", wind_speed);
+
+    println!("{}", format!("Weather in {}:", response.name).bright_green());
+}
+
 fn main() {
     println!("{}", "Welcome to Weather Station".bright_yellow());
 
@@ -50,12 +98,21 @@ fn main() {
         io::stdin().read_line(&mut country_code).expect("Failed to read input");
         let country_code = country_code.trim();
 
+        let api_key = "52856cd34fb8cb387cee933c66e44dc1";
+
+        match get_weather_info(city, country_code, api_key) {
+            Ok(response) => { display_weather_info(&response); }
+            Err(error) => { println!("Error fetching weather data: {}", error); }
+        }
+
         println!("You entered: {}, {}", city, country_code);
 
         println!("{}", "Do you want to search for weather in another city? (yes/no):".bright_green());
         let mut input = String::new();
         io::stdin().read_line(&mut input).expect("Failed to read input");
         let input = input.trim().to_lowercase();
+
+
 
         if input != "yes" {
             println!("Thank you for using our software!");
