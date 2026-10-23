@@ -1,0 +1,29 @@
+name: Rust CI
+
+on:
+    push:
+    pull_request:
+
+permissions:
+    contents: read
+
+env:
+    CARGO_TERM_COLOR: always
+
+jobs:
+    build:
+        name: Check and build Rust project
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Check our repository
+              uses: actions/checkout@v6
+
+            - name: Check Rust code
+              run: cargo check
+
+            - name: Build project
+              run: cargo build
+
+            - name: Rust tests
+              run: cargo test
