@@ -55,7 +55,14 @@ fn get_temperature_emoji(temp: f64) -> &'static str {
 }
 
 fn display_weather_info(response: &WeatherResponse) {
-    let description = &response.weather[0].description;
+    //let description = &response.weather[0].description;
+    let description = match response.weather.first() {
+        Some(weather) => &weather.description,
+        None => {
+            println!("Weather description is unavailable.");
+            return;
+        }
+    };
 
     let colored_description = match description.as_str() {
         "clear sky" => description.bright_yellow(),
