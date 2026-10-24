@@ -19,6 +19,12 @@ jobs:
             - name: Check our repository
               uses: actions/checkout@v6
 
+            - name: Check formatting
+              run: cargo fmt -all -- --check
+            
+            - name: Run Clippy
+              run: cargo clippy --all-targets --all-features
+
             - name: Check Rust code
               run: cargo check
 
