@@ -148,3 +148,13 @@ fn main() {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn temperature_below_zero_returns_freezing_emoji() {
+        assert_eq!(get_temperature_emoji(-5.0), "🥶");
+    }
+}
