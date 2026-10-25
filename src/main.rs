@@ -157,4 +157,44 @@ mod tests {
     fn temperature_below_zero_returns_freezing_emoji() {
         assert_eq!(get_temperature_emoji(-5.0), "🥶");
     }
+
+    #[test]
+    fn temperature_between_zero_and_ten_returns_snowflake_emoji() {
+        assert_eq!(get_temperature_emoji(5.0), "❄️");
+    }
+
+    #[test]
+    fn temperature_between_ten_and_twenty_partly_summer_emoji() {
+        assert_eq!(get_temperature_emoji(15.0), "🌤️");
+    }
+
+    #[test]
+    fn temperature_between_twenty_and_thirty_returns_sunny_emoji() {
+        assert_eq!(get_temperature_emoji(25.0), "☀️");
+    }
+
+    #[test]
+    fn temperature_above_or_equal_to_thirty_returns_fire_emoji() {
+        assert_eq!(get_temperature_emoji(35.0), "🔥");
+    }
+
+    #[test]
+    fn temperature_at_zero_returns_snowflake_emoji() {
+        assert_eq!(get_temperature_emoji(0.0), "❄️");
+    }
+
+    #[test]
+    fn temperature_at_ten_returns_partly_sunny_emoji() {
+        assert_eq!(get_temperature_emoji(10.0), "🌤️");
+    }
+
+    #[test]
+    fn temperature_at_twenty_returns_sunny_emoji() {
+        assert_eq!(get_temperature_emoji(20.0), "☀️");
+    }
+
+    #[test]
+    fn temperature_at_thirty_returns_fire_emoji() {
+        assert_eq!(get_temperature_emoji(30.0), "🔥");
+    }
 }
