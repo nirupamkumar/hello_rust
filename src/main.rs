@@ -18,6 +18,7 @@ struct Weather {
 #[derive(Deserialize, Debug)]
 struct Main {
     temp: f64,
+    feels_like: f64,
     humidity: f64,
     pressure: f64,
 }
@@ -77,17 +78,29 @@ fn display_weather_info(response: &WeatherResponse) {
         _ => description.normal(),
     };
 
-    println!("Weather: {}", colored_description);
+    println!();
+    println!("{}", "----------------------------------------".white());
+    println!("{}", "             WEATHER STATION".bold().white());
+    println!("{}", "----------------------------------------".white());
+    println!();
+
+    println!("Condition    : {}", colored_description);
 
     let temp = response.main.temp;
+    let feels_like = response.main.feels_like;
     let humidity = response.main.humidity;
     let pressure = response.main.pressure;
     let wind_speed = response.wind.speed;
 
-    println!("Temperature: {}°C {}", temp, get_temperature_emoji(temp));
-    println!("Humidity: {}%", humidity);
-    println!("Pressure: {} hPa", pressure);
-    println!("Wind Speed: {} m/s", wind_speed);
+    println!(
+        "Temperature  : {}°C {}",
+        temp,
+        get_temperature_emoji(temp)
+    );
+    println!("Feels Like   : {}°C", feels_like);
+    println!("Humidity     : {}%", humidity);
+    println!("Pressure     : {} hPa", pressure);
+    println!("Wind Speed   : {} m/s", wind_speed);
 
     println!(
         "{}",
@@ -96,6 +109,7 @@ fn display_weather_info(response: &WeatherResponse) {
 }
 
 fn main() {
+    println!();
     println!("{}", "Welcome to Weather Station".bright_yellow());
 
     dotenvy::dotenv().ok();
@@ -104,6 +118,7 @@ fn main() {
         .expect("OPENWEATHER_API_KEY must be set in your .env file");
 
     loop {
+        println!();
         println!("{}", "Please enter the name of the city:".bright_green());
         let mut city = String::new();
         io::stdin()
@@ -131,7 +146,7 @@ fn main() {
         }
 
         println!("You entered: {}, {}", city, country_code);
-
+        println!();
         println!(
             "{}",
             "Do you want to search for weather in another city? (yes/no):".bright_green()
