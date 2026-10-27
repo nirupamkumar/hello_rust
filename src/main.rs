@@ -92,11 +92,7 @@ fn display_weather_info(response: &WeatherResponse) {
     let pressure = response.main.pressure;
     let wind_speed = response.wind.speed;
 
-    println!(
-        "Temperature  : {}°C {}",
-        temp,
-        get_temperature_emoji(temp)
-    );
+    println!("Temperature  : {}°C {}", temp, get_temperature_emoji(temp));
     println!("Feels Like   : {}°C", feels_like);
     println!("Humidity     : {}%", humidity);
     println!("Pressure     : {} hPa", pressure);
